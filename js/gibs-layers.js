@@ -47,7 +47,7 @@ export const GIBS_LAYERS = [
   "key": "lst",
   "role": "overlay",
   "title": "Land surface temperature, day (MODIS Terra, monthly)",
-  "about": "Monthly mean daytime land surface temperature from MODIS on Terra. Land only.",
+  "about": "Monthly mean daytime land surface temperature from MODIS on Terra. Land only. The scale is in kelvin: 300 K is about 27 °C (subtract 273.15).",
   "gibsTitle": "Land Surface Temperature (L3, Monthly, Day, MODIS, Terra)",
   "format": "image/png",
   "ext": "png",

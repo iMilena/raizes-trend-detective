@@ -21,7 +21,7 @@ XLINK = "{http://www.w3.org/1999/xlink}href"
 WANTED = [
     ("VIIRS_NOAA20_CorrectedReflectance_TrueColor", "base", "True color (VIIRS, NOAA-20)", None, None),
     ("MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day", "overlay", "Land surface temperature, day (MODIS Terra, monthly)",
-     "lst", "Monthly mean daytime land surface temperature from MODIS on Terra. Land only."),
+     "lst", "Monthly mean daytime land surface temperature from MODIS on Terra. Land only. The scale is in kelvin: 300 K is about 27 °C (subtract 273.15)."),
     ("IMERG_Precipitation_Rate", "overlay", "Precipitation rate (GPM IMERG, daily)",
      "imerg", "Daily precipitation rate from the GPM IMERG multi-satellite product."),
     ("GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies", "overlay", "Sea surface temperature anomaly (GHRSST MUR25, daily)",

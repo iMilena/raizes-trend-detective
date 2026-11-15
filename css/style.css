@@ -165,3 +165,7 @@ footer{padding:36px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
 .maplibregl-ctrl-bottom-left{z-index:4}
 .map-caption{bottom:44px}
 @media (max-width:760px){.maplibregl-ctrl-bottom-left{bottom:76px}.map-caption{bottom:120px}}
+.date-row{grid-template-columns:44px minmax(0,1fr) 44px 44px}
+.date-row input{min-width:0;padding:9px 6px}
+.layers{max-height:calc(100% - 220px)}
+@media (max-width:760px){.layers{max-height:calc(100% - 300px)}}

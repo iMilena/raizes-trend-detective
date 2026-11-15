@@ -148,4 +148,4 @@ async function play() {
 }
 $("d-play").addEventListener("click", () => S.playing ? stop() : play());
 
-if (map) { if (map.loaded()) addLayers(); else map.once("load", addLayers); } else ui();
+if (map) { if (map.isStyleLoaded()) addLayers(); else map.once("load", addLayers); } else ui();
