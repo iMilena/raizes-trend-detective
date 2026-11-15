@@ -1,4 +1,4 @@
-/* Raízes do Futuro: Earth Trend Detective, globe and result panel.
+/* Raízes do Futuro: Island Trend Detective, globe and result panel.
    Click anywhere: outline the NASA POWER cell, download its annual series, answer what, how much,
    is it significant and since when. Statistics come from js/stats.js (same code as the Node tests).
    Code written with AI assistance (Anthropic Claude) and reviewed by the team. */

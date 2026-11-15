@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Raízes do Futuro: Earth Trend Detective | NASA Space Apps 2026</title>
+<title>Raízes do Futuro: Island Trend Detective | NASA Space Apps 2026</title>
 <meta name="description" content="A global, interactive Earth system trend detective built on NASA POWER and NASA GIBS: click anywhere on the planet to learn what is changing, where, how much, and whether the change is statistically significant. Case study: heat risk for the community waste collectors of Boipeba Island, Brazil.">
 <meta name="generator" content="Page, map, tool and analysis code written with AI assistance (Anthropic Claude), reviewed by the team">
 <meta name="ai-disclosure" content="Code written with AI assistance (Anthropic Claude). Data are NASA POWER and NASA GIBS values, not AI generated.">
@@ -39,7 +39,7 @@
   <div id="map" role="application" aria-label="Interactive globe. Click any place to analyse its NASA POWER grid cell. Keyboard users can type coordinates in the search box."></div>
 
   <div class="topbar">
-    <div class="brand"><b>Raízes do Futuro</b><span>Earth Trend Detective · NASA Space Apps 2026</span></div>
+    <div class="brand"><b>Raízes do Futuro</b><span>Island Trend Detective · NASA Space Apps 2026</span></div>
     <form class="search" id="search" role="search">
       <label class="sr-only" for="q">Coordinates (lat, lon) or place name</label>
       <input id="q" type="search" placeholder="lat, lon (e.g. -3.12, -60.02) or a city" autocomplete="off">
@@ -180,6 +180,9 @@
       <li>NASA POWER Daily API: <a href="https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M,T2M_MAX,T2M_MIN,RH2M,PRECTOTCORR&amp;community=AG&amp;longitude=-38.93&amp;latitude=-13.62&amp;start=19810101&amp;end=20251231&amp;format=JSON">https://power.larc.nasa.gov/api/temporal/daily/point (request for Boipeba)</a></li>
       <li>NASA POWER Hourly API: <a href="https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M,RH2M&amp;community=AG&amp;longitude=-38.93&amp;latitude=-13.62&amp;time-standard=LST&amp;start=20250101&amp;end=20251231&amp;format=JSON">https://power.larc.nasa.gov/api/temporal/hourly/point (request for Boipeba, one year)</a></li>
       <li>NASA POWER Data Access Viewer: <a href="https://power.larc.nasa.gov/data-access-viewer/">https://power.larc.nasa.gov/data-access-viewer/</a> · Documentation: <a href="https://power.larc.nasa.gov/docs/">https://power.larc.nasa.gov/docs/</a></li>
+      <li>NASA GIBS (Global Imagery Browse Services), WMTS in EPSG:3857, used for the globe images only: <a href="https://gibs.earthdata.nasa.gov/">https://gibs.earthdata.nasa.gov/</a> · capabilities: <a href="https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml">https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml</a>.
+        Layers: <code>MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day</code>, <code>IMERG_Precipitation_Rate</code> (GPM IMERG, <a href="https://gpm.nasa.gov/data/imerg">https://gpm.nasa.gov/data/imerg</a>), <code>GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies</code>, <code>VIIRS_NOAA20_CorrectedReflectance_TrueColor</code>.
+        Tiles: <code>https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/{layer}/default/{date}/GoogleMapsCompatible_Level{6 or 9}/{z}/{y}/{x}.{png or jpeg}</code></li>
     </ul>
   </div>
 </section>
@@ -188,7 +191,7 @@
   <div class="wrap">
     <p><strong>AI disclosure.</strong> The analysis code, the globe and live tool, this page and the chart code were written with the help of an AI assistant (Anthropic Claude) and reviewed by the team.
     Every chart carries a visible note saying so. The data are NASA POWER and NASA GIBS values, not AI generated. No NASA logo or mark is used.</p>
-    <p id="credits">Satellite imagery: Esri World Imagery (© Esri, Maxar, Earthstar Geographics, and the GIS User Community). Place labels: Esri World Boundaries and Places. Place search: Nominatim, © OpenStreetMap contributors (ODbL). Map library: MapLibre GL JS (BSD-3-Clause).
+    <p id="credits">NASA overlays and true color imagery: NASA GIBS, https://gibs.earthdata.nasa.gov/. Satellite imagery: Esri World Imagery (© Esri, Maxar, Earthstar Geographics, and the GIS User Community). Place labels: Esri World Boundaries and Places. Place search: Nominatim, © OpenStreetMap contributors (ODbL). Map library: MapLibre GL JS (BSD-3-Clause).
     Raízes do Futuro · Boipeba, Cairu, Bahia, Brazil · NASA Space Apps Challenge 2026 · MIT License.</p>
   </div>
 </footer>

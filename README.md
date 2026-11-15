@@ -3,29 +3,57 @@
 **NASA Space Apps Challenge 2026 · Challenge: Be An Earth System Trend Detective!**
 Team **Raízes do Futuro**: Milena Calasans, Maria Clara Bastos, Talyta Silva
 
-A live web tool that turns 45 years of NASA POWER data into four answers for any place on Earth: **what** is changing,
-**where**, **how much**, and **is the change statistically significant**, plus **since when**. It also builds an hourly
-heat calendar for outdoor work and a downloadable report. Case study: heat risk for the community waste collectors of
-Boipeba Island (Cairu, Bahia, Brazil).
+An interactive globe that turns 45 years of NASA POWER data into four answers for any place on Earth: **what** is changing,
+**where**, **how much**, and **is the change statistically significant**, plus **since when**. You fly over the planet with
+real NASA GIBS imagery (land surface temperature, GPM IMERG precipitation, sea surface temperature anomaly, true color),
+click anywhere, and get the trend for that NASA POWER grid cell in seconds. It also builds an hourly heat calendar for
+outdoor work and a downloadable report. Case study: heat risk for the community waste collectors of Boipeba Island
+(Cairu, Bahia, Brazil).
 
 - **Live tool and full story:** https://imilena.github.io/raizes-trend-detective/ (or open `index.html` in a browser with internet access)
 - **Demo slides (7 pages):** [`slides/raizes_trend_detective_demo.pdf`](slides/raizes_trend_detective_demo.pdf)
 
 ## The live tool
 
-Everything runs in the browser: the page calls the NASA POWER API directly (no server, no login, no installation)
-and runs the same statistics as the Python code, implemented in JavaScript.
+Everything runs in the browser: the page calls the NASA POWER API and the NASA GIBS tile service directly (no server,
+no login, no API key, no installation) and runs the same statistics as the Python code, implemented in JavaScript
+(`js/stats.js`). It is a static site that works on GitHub Pages.
 
 | Feature | What it does |
 |---|---|
-| **Investigate** | Pick a place (map click, preset or coordinates), a variable and a period. Downloads monthly NASA POWER data, builds annual means or totals and answers: what (direction), how much (Theil-Sen slope per decade with 95% CI, first vs last decade), significant? (Mann-Kendall with Hamed-Rao correction), since when (Pettitt change point). Shows a chart and a plain-language verdict. |
-| **Scan the area** | Tests 9 neighbouring NASA POWER cells (0.5° x 0.625° apart), colours them on the map and applies Benjamini-Hochberg false discovery rate control: the "where" answer. |
-| **Build heat calendar** | Downloads 10 years of NASA POWER hourly temperature and humidity, computes the heat index and compares 2001 to 2005 with 2021 to 2025: days per year at or above 32 °C, risky months, a month by hour heat map and a suggested time limit for heavy outdoor work in each month. |
-| **Download report** | One-page HTML report (four answers, chart, heat calendar if built, method, limits, NASA data links). Opens in any browser and can be printed to PDF, for grant applications, city halls or ESG reports. |
-| **Download data (CSV)** | The annual series with its NASA POWER source URL in the header. |
+| **Globe** | Full-screen MapLibre GL JS globe, from the whole planet down to island scale. Base imagery: Esri World Imagery or NASA GIBS true color (VIIRS NOAA-20), with a labels-only layer on top. Starts on Boipeba, with a pulsing marker and a "Go to Boipeba case study" button. |
+| **NASA layers** | NASA GIBS overlays with their official colour legends, adjustable opacity, a date picker and a play button that steps by day, month or year (same month every year) to watch the planet change. The visible layer, its date and its source are always on screen. These images are for looking only: no trend is computed from image colours. |
+| **Click anywhere** | Outlines the NASA POWER cell (0.5° latitude x 0.625° longitude) that contains the point and opens the result panel: what (direction), how much (Theil-Sen slope per decade with 95% CI, first vs last decade), significant? (Mann-Kendall with Hamed-Rao correction), since when (Pettitt change point), a chart and a plain-language verdict. Period 1981 to 2025 by default. |
+| **Search** | Type `lat, lon` (for example `-3.12, -60.02`) or a place name. Place names use Nominatim (OpenStreetMap) only when you press search, at most once per second, with attribution. |
+| **Scan the area** | Tests the cell and its 8 neighbours, applies Benjamini-Hochberg false discovery rate control (q = 0.05) and draws the 9 cells on the map: blue for decrease, orange for increase, faded, dashed and labelled "n.s." when not significant. This is the "where" answer. |
+| **Heat calendar** | Downloads 10 years of NASA POWER hourly temperature and humidity for the cell (progress "year 3 of 10", cancel button), computes the heat index and compares 2001 to 2005 with 2021 to 2025: days per year at or above 32 °C, risky months, a month by hour heat map and a suggested time limit for heavy outdoor work. |
+| **Download report** | One-page HTML report (four answers, chart, 9-cell scan and heat calendar if built, method, limits, NASA data links). Opens in any browser and can be printed to PDF, for grant applications, city halls or ESG reports. |
+| **Download CSV** | The annual series with its NASA POWER source URL in the header. |
 
 Variables available: air temperature (`T2M`), daily maximum (`T2M_MAX`), precipitation (`PRECTOTCORR`), relative
-humidity (`RH2M`), wind speed (`WS2M`) and surface solar radiation (`ALLSKY_SFC_SW_DWN`).
+humidity (`RH2M`), wind speed (`WS2M`) and surface solar radiation (`ALLSKY_SFC_SW_DWN`, in MJ/m²/day as returned by the API).
+
+**Robustness.** At most 3 NASA POWER requests run at once, spaced by 250 ms, and every answer is cached in memory for the
+session (per cell, variable and period). The panel says clearly when the API is unreachable, busy or down, when a place
+has fewer than 10 complete years, and which incomplete years were skipped (for example solar radiation before 1984).
+On phones the result panel becomes a bottom drawer and every control is at least 44 px.
+
+### NASA GIBS layers used
+
+Identifiers, formats, zoom levels and dates were read from the GIBS WMTS GetCapabilities (EPSG:3857) by
+`analysis/gibs_layers.py`, which writes `js/gibs-layers.js`. Run it again to refresh the available dates.
+
+| Layer identifier | What it shows | Time | Max zoom |
+|---|---|---|---|
+| `MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day` | Land surface temperature, day (MODIS Terra) | monthly, March 2000 onward | 6 |
+| `IMERG_Precipitation_Rate` | Precipitation rate (GPM IMERG) | daily, June 2000 onward | 6 |
+| `GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies` | Sea surface temperature anomaly (GHRSST MUR25) | daily, September 2002 onward | 6 |
+| `VIIRS_NOAA20_CorrectedReflectance_TrueColor` | True color base imagery (VIIRS NOAA-20) | daily, 2018 onward | 9 |
+
+Tile URL pattern: `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/{layer}/default/{date}/GoogleMapsCompatible_Level{6 or 9}/{z}/{y}/{x}.{png or jpeg}`.
+Legends: `https://gibs.earthdata.nasa.gov/legends/MODIS_Land_Surface_Temp_H.svg`, `https://gibs.earthdata.nasa.gov/legends/GPM_Precipitation_Rate_H.svg`,
+`https://gibs.earthdata.nasa.gov/legends/GHRSST_Sea_Surface_Temperature_Anomalies_H.svg`.
+Capabilities: `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml`.
 
 ## Key findings: Boipeba Island
 
@@ -75,6 +103,18 @@ python analysis/make_figures_heat.py     # figures 06 to 08
 
 `heat_and_changepoint.py` reads `data/boipeba_annual.csv`, so run `trend_analysis.py` first.
 
+## Tests
+
+```bash
+node tests/parity.test.mjs          # js/stats.js on data/boipeba_annual.csv must reproduce data/results.json
+node tests/parity.test.mjs --live   # also downloads NASA POWER monthly data and checks the browser aggregation
+```
+
+Expected for Boipeba (-13.62, -38.93), 1981 to 2025: `T2M` +0.26 °C per decade (95% CI +0.20 to +0.33), Mann-Kendall
+p < 0.001, change point after 1997; `PRECTOTCORR` -263 mm per decade, change point after 2005.
+
+To try the page locally: run `python -m http.server 8000` in this folder and open `http://localhost:8000/`.
+
 ## Publishing the page (GitHub Pages)
 
 1. Push this folder to a public repository (for example `iMilena/raizes-trend-detective`).
@@ -84,7 +124,17 @@ python analysis/make_figures_heat.py     # figures 06 to 08
 ## Repository
 
 ```
-index.html                           live tool and project page
+index.html                           globe, live tool and Boipeba case study
+css/style.css                        page styles (Raízes do Futuro palette, Fraunces and Manrope)
+js/stats.js                          statistics shared by the page and the Node tests
+js/power.js                          NASA POWER client (3 parallel requests, cache, cancel, errors)
+js/app.js                            globe, click analysis, result panel, search
+js/scan.js                           "Scan the area" (9 cells, FDR)
+js/layers.js                         NASA GIBS layers, legends, date and play
+js/gibs-layers.js                    GIBS layer list generated from GetCapabilities
+js/heat.js                           heat calendar, report and CSV downloads
+tests/parity.test.mjs                parity test against the Python results
+analysis/gibs_layers.py              reads the GIBS GetCapabilities and writes js/gibs-layers.js
 analysis/stats.py                    shared statistics (Mann-Kendall, Theil-Sen, FDR)
 analysis/fetch_power.py              downloads all NASA POWER series used offline
 analysis/trend_analysis.py           monthly trends for Boipeba and the Baixo Sul grid
@@ -112,6 +162,8 @@ SUBMISSION.md                        texts for the Space Apps submission form
   https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M,RH2M&community=AG&longitude=-38.93&latitude=-13.62&time-standard=LST&start=20250101&end=20251231&format=JSON
 - NASA POWER Data Access Viewer: https://power.larc.nasa.gov/data-access-viewer/
 - NASA POWER documentation: https://power.larc.nasa.gov/docs/
+- NASA GIBS (Global Imagery Browse Services), WMTS in EPSG:3857: https://gibs.earthdata.nasa.gov/ (layers and URLs in the table above; visualization only)
+- GPM IMERG precipitation, shown through the GIBS layer `IMERG_Precipitation_Rate`: https://gpm.nasa.gov/data/imerg
 
 ## Related tools
 
@@ -124,7 +176,7 @@ result into a concrete decision: when it is safe to work outdoors.
 ## Roadmap
 
 - Add a "Climate" panel to the Raízes do Futuro project dashboard, refreshed yearly from the NASA POWER API.
-- Validate rainfall with GPM IMERG and add sea surface temperature and sea level for coastal sites (Earthdata Login).
+- Validate rainfall trends numerically with GPM IMERG and local gauges (the globe already shows IMERG images), and add sea level for coastal sites.
 - Combine the heat calendar with a daily heat forecast so the pause rule works in practice.
 - Relate rainfall and heat to the waste reaching mangroves and beaches using the project's collection records.
 
@@ -132,7 +184,7 @@ result into a concrete decision: when it is safe to work outdoors.
 
 The analysis code, the live tool, the project page, the chart code, the slides and the first drafts of the texts were
 produced with the help of an AI assistant (Anthropic Claude) and reviewed by the team. AI use is flagged in code headers,
-page metadata and a visible note on every chart. The data are NASA POWER values, not AI generated. No AI-generated image
+page metadata, the page footer and a visible note on every chart. The data are NASA POWER and NASA GIBS values, not AI generated. No AI-generated image
 or video is used, and no NASA logo or mark appears in any material.
 
 ## About Raízes do Futuro
@@ -141,4 +193,5 @@ Raízes do Futuro, winner of the UNICEF Brazil Youth Challenge Blockchain 2026, 
 Boipeba, splits recycling revenue by smart contract and directs part of it to a Children's Fund for health and education.
 This Trend Detective adds a climate layer to the project.
 
-Map tiles © OpenStreetMap contributors; map library Leaflet. License: MIT.
+Imagery: Esri World Imagery (© Esri, Maxar, Earthstar Geographics, and the GIS User Community) and NASA GIBS. Labels: Esri
+World Boundaries and Places. Place search: Nominatim, © OpenStreetMap contributors. Map library: MapLibre GL JS. License: MIT.

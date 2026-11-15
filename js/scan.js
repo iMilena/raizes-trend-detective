@@ -1,4 +1,4 @@
-/* Raízes do Futuro: Earth Trend Detective, "Scan the area" (where).
+/* Raízes do Futuro: Island Trend Detective, "Scan the area" (where).
    Tests the clicked NASA POWER cell and its 8 neighbours, applies Benjamini-Hochberg FDR (q = 0.05)
    and colours the cells on the map by slope per decade: orange for increase, blue for decrease,
    faded and dashed when not significant. Code written with AI assistance (Anthropic Claude). */

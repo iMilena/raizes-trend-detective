@@ -1,4 +1,4 @@
-/* Raízes do Futuro: Earth Trend Detective, NASA GIBS layers on the globe.
+/* Raízes do Futuro: Island Trend Detective, NASA GIBS layers on the globe.
    Base imagery switch (Esri World Imagery or GIBS true color), overlays with official legends,
    opacity, date and play. GIBS images are for viewing only: trend statistics always come from the
    NASA POWER series, never from image colours. Code written with AI assistance (Anthropic Claude). */

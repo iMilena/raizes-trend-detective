@@ -1,4 +1,4 @@
-/* Raízes do Futuro: Earth Trend Detective, heat calendar and downloads.
+/* Raízes do Futuro: Island Trend Detective, heat calendar and downloads.
    Heat calendar: NASA POWER hourly T2M and RH2M for 2001 to 2005 and 2021 to 2025, NOAA/NWS heat index,
    share of days at or above 32 °C by month and hour. Downloads: one-page HTML report and CSV.
    Code written with AI assistance (Anthropic Claude) and reviewed by the team. */
@@ -95,7 +95,7 @@ function download(name, content, type) { const a = document.createElement("a"); 
 function downloadCsv() {
   const r = state.last; if (!r) { status("Run an analysis first: click a place on the globe.", "err"); return; }
   const VV = VARS[r.v];
-  let c = `# Raizes do Futuro: Earth Trend Detective\n# Source: NASA POWER monthly API, ${r.url}\n# Place: ${r.place} (${r.lat.toFixed(4)}, ${r.lon.toFixed(4)}); NASA POWER cell centred at ${r.cell.lat}, ${r.cell.lon}\n# Annual ${VV.agg === "sum" ? "total" : "mean"} of ${r.v} in ${VV.unit}; years with a missing month are left out${r.skipped.length ? ` (${r.skipped.join(" ")})` : ""}\n# Generated ${new Date().toISOString().slice(0, 10)}; tool code written with AI assistance (Anthropic Claude)\nyear,${r.v}_${VV.agg}_${VV.unit.replace(/[^a-zA-Z%/]/g, "")}\n`;
+  let c = `# Raizes do Futuro: Island Trend Detective\n# Source: NASA POWER monthly API, ${r.url}\n# Place: ${r.place} (${r.lat.toFixed(4)}, ${r.lon.toFixed(4)}); NASA POWER cell centred at ${r.cell.lat}, ${r.cell.lon}\n# Annual ${VV.agg === "sum" ? "total" : "mean"} of ${r.v} in ${VV.unit}; years with a missing month are left out${r.skipped.length ? ` (${r.skipped.join(" ")})` : ""}\n# Generated ${new Date().toISOString().slice(0, 10)}; tool code written with AI assistance (Anthropic Claude)\nyear,${r.v}_${VV.agg}_${VV.unit.replace(/[^a-zA-Z%/]/g, "")}\n`;
   r.years.forEach((y, i) => c += `${y},${r.vals[i].toFixed(4)}\n`);
   download(`trend-data-${slug(r.place)}-${r.v}.csv`, c, "text/csv");
 }
@@ -106,10 +106,10 @@ function downloadReport() {
   const scan = lastScan && lastScan.center.key === r.cell.key && lastScan.v === r.v && lastScan.y0 === state.y0 && lastScan.y1 === state.y1 ? lastScan : null;
   const scanBlock = scan ? `<h2>Where: the cell and its 8 neighbours</h2><table><tr><th>Cell centre</th><th>Slope per decade</th><th>Significant (FDR q = 0.05)</th></tr>${scan.cells.map(o => `<tr><td>${o.c.lat.toFixed(2)}, ${o.c.lon.toFixed(3)}</td><td>${o.err !== undefined ? "no data" : fmt(o.dec, VV.dec) + " " + VV.unit}</td><td>${o.err !== undefined ? "" : o.sig ? "yes" : "no"}</td></tr>`).join("")}</table>` : "";
   const heatBlock = lastHeat && lastHeat.key === r.cell.key ? `<h2>Heat calendar for outdoor work</h2><p>${lastHeat.verdict}</p>${lastHeat.svg.replace(/style="[^"]*"/, 'style="width:100%;height:auto;background:#061713;border-radius:10px"')}<p class="muted">Hourly data: NASA POWER hourly API (T2M, RH2M, local solar time), 2001 to 2005 and 2021 to 2025, https://power.larc.nasa.gov/api/temporal/hourly/point</p>` : "";
-  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Trend report: ${esc(r.place)}</title><meta name="generator" content="Raizes do Futuro: Earth Trend Detective (code written with AI assistance, Anthropic Claude)">
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Trend report: ${esc(r.place)}</title><meta name="generator" content="Raizes do Futuro: Island Trend Detective (code written with AI assistance, Anthropic Claude)">
 <style>body{font-family:Segoe UI,system-ui,sans-serif;max-width:900px;margin:30px auto;padding:0 20px;color:#10241d;line-height:1.55}h1{font-family:Georgia,serif;margin-bottom:4px}h2{font-family:Georgia,serif;margin-top:30px}
 table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #cfdcd4;padding:8px;text-align:left;vertical-align:top}th{color:#4a6b5d;font-size:13px;text-transform:uppercase}svg{width:100%;height:auto;background:#061713;border-radius:10px}.muted{color:#5b7a6c;font-size:13px}.flag{background:#fdf1df;border-left:4px solid #d97742;padding:8px 10px}@media print{svg{break-inside:avoid}}</style></head><body>
-<p class="muted">NASA Space Apps Challenge 2026 · Raízes do Futuro: Earth Trend Detective · generated ${new Date().toISOString().slice(0, 10)}</p>
+<p class="muted">NASA Space Apps Challenge 2026 · Raízes do Futuro: Island Trend Detective · generated ${new Date().toISOString().slice(0, 10)}</p>
 <h1>Earth system trend report: ${esc(r.place)}</h1><p>${esc(VV.name)} (${esc(VV.unit)}), ${r.years[0]} to ${r.years.at(-1)}, point ${r.lat.toFixed(2)}, ${r.lon.toFixed(2)}, NASA POWER cell centred at ${r.cell.lat.toFixed(2)}, ${r.cell.lon.toFixed(3)} (0.5° x 0.625°).</p>
 <h2>Four answers</h2><table><tr><th>Question</th><th>Answer</th><th>Detail</th></tr>${rows.map(x => `<tr><td>${x[0]}</td><td><strong>${esc(x[1])}</strong></td><td>${esc(x[2])}</td></tr>`).join("")}</table>
 <div>${$("verdict").innerHTML}</div>${$("chart").outerHTML}${scanBlock}${heatBlock}

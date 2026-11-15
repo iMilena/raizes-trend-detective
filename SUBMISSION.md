@@ -17,7 +17,7 @@ Raízes do Futuro: Island Trend Detective
 
 ## 2. High-Level Summary (até 1.500 caracteres)
 
-Raízes do Futuro: Island Trend Detective is a live web tool that turns 45 years of NASA POWER data into four answers for any place on Earth: what is changing, where, how much, and whether the change is statistically significant. Pick a point on the map and the page calls the NASA POWER API, runs Mann-Kendall tests with autocorrelation correction, Theil-Sen slopes, Pettitt change-point detection and false discovery rate control across neighbouring cells, and explains the result in plain language. It also builds an hourly heat calendar for outdoor work and a downloadable report for any place. We tested it on Boipeba Island, Brazil, where our community recycling project works outdoors. The answer: days when the heat index reaches 32 °C, the level of extreme caution for outdoor work, doubled from 64 to 132 a year, with a shift after 2018. Warming is significant across the whole coast. We turned the hourly heat calendar into a safer collection schedule and flag a possible drying signal openly instead of claiming it. It matters because climate data rarely reaches the small communities that live with it, and this tool works for any of them.
+Raízes do Futuro: Island Trend Detective is an interactive globe that turns 45 years of NASA POWER data into four answers for any place on Earth: what is changing, where, how much, and whether the change is statistically significant. You fly over the planet with real NASA GIBS imagery (land surface temperature, GPM IMERG rain, sea surface temperature anomaly) and click anywhere: the page outlines that NASA POWER grid cell, runs Mann-Kendall tests with autocorrelation correction, Theil-Sen slopes and Pettitt change points, and explains the result in plain language. Scanning the 8 neighbouring cells with false discovery rate control shows where. It also builds an hourly heat calendar for outdoor work and a downloadable report. On Boipeba Island, Brazil, where our community recycling project works outdoors, days when the heat index reaches 32 °C (extreme caution for outdoor work) doubled from 64 to 132 a year, with a shift after 2018. We turned the heat calendar into a safer collection schedule and flag a possible drying signal instead of claiming it. Climate data rarely reaches the communities that live with it; this tool works for any of them, with no login.
 
 ---
 
@@ -39,14 +39,16 @@ Repositório: `https://github.com/iMilena/raizes-trend-detective`
 ## 5. Project Details
 
 **What it does**
-Raízes do Futuro: Island Trend Detective is a live, open web tool. Anyone clicks a place on the map (or types coordinates), chooses a NASA POWER variable (air temperature, daily maximum, rainfall, humidity, wind or solar radiation) and gets four answers in seconds:
+Raízes do Futuro: Island Trend Detective is a live, open web tool built around an interactive globe. Anyone can fly over the whole planet, from space down to the scale of an island, over satellite imagery and real NASA GIBS layers: daytime land surface temperature (MODIS Terra, monthly), precipitation rate (GPM IMERG, daily) and sea surface temperature anomaly (GHRSST MUR25, daily), each with its official colour legend, adjustable opacity, a date picker and a play button that animates the layer by day, month or year to watch the planet change. The visible layer, date and source are always on screen. These images are for looking only; every number comes from the NASA POWER series.
+Clicking anywhere on Earth (or typing coordinates or a place name) outlines the NASA POWER grid cell (0.5° latitude x 0.625° longitude) that contains the point. The user chooses a NASA POWER variable (air temperature, daily maximum, rainfall, humidity, wind or solar radiation) and a period (1981 to 2025 by default) and gets four answers in seconds:
 - What is changing: the direction of the trend, in plain language.
 - How much: Theil-Sen slope per decade with a 95% confidence interval, plus first and last decade means.
 - Is it significant: Mann-Kendall test with the Hamed and Rao (1998) correction for autocorrelation.
 - Since when: Pettitt change-point test.
-"Scan the area" tests 9 neighbouring NASA POWER cells and colours them on the map, with Benjamini-Hochberg false discovery rate control, to answer where.
-"Build heat calendar" downloads 10 years of NASA POWER hourly temperature and humidity for the chosen place, computes the heat index and compares 2001 to 2005 with 2021 to 2025: how many days reach 32 °C (extreme caution for outdoor work), in which months and from which hour, with a suggested work schedule.
-"Download report" produces a one-page report (four answers, chart, heat calendar, method, limits and NASA data links) that a community can attach to a grant application or send to its city hall, and "Download data" exports the annual series as CSV.
+"Scan the area" tests the cell and its 8 neighbours with Benjamini-Hochberg false discovery rate control and draws them on the globe, blue for decrease and orange for increase, faded and marked "n.s." when not significant: the answer to where.
+"Heat calendar" downloads 10 years of NASA POWER hourly temperature and humidity for the chosen place, computes the heat index and compares 2001 to 2005 with 2021 to 2025: how many days reach 32 °C (extreme caution for outdoor work), in which months and from which hour, with a suggested work schedule.
+"Download report" produces a one-page report (four answers, chart, heat calendar, method, limits and NASA data links) that a community can attach to a grant application or send to its city hall, and "Download CSV" exports the annual series.
+Everything is static (GitHub Pages): no server, no login, no API key. The browser calls the NASA POWER and GIBS services directly, with at most 3 requests at a time, a cache and clear messages when the service is down or a place lacks data. The statistics live in one JavaScript file that a Node test checks against our Python analysis (Boipeba: +0.26 °C per decade, 95% CI +0.20 to +0.33, p < 0.001, change point after 1997). The page works on phones (bottom drawer, 44 px buttons) and follows accessibility basics (real buttons, visible focus, contrast of at least 4.5:1, blue and orange instead of red and green).
 
 **Case study: Boipeba Island, Bahia, Brazil**
 Raízes do Futuro, winner of the UNICEF Brazil Youth Challenge Blockchain 2026, runs community waste collection on Boipeba, on foot and by boat. Using NASA POWER monthly, daily and hourly data we found:
@@ -62,13 +64,13 @@ NASA POWER shows annual rainfall at Boipeba falling from about 1,880 mm to about
 - Safer work: the hourly heat calendar becomes the collection schedule (finish routes by 8 a.m. from February to April and by 9 a.m. in the rest of the risky season, November to May) and a pause rule when the heat index forecast passes 32 °C.
 - Better funding decisions: NASA-backed trends, with stated uncertainty, help the project's Children's Fund and its partners prioritise climate adaptation for children's health and education.
 - Open for every community: the tool runs for any coordinates in a browser, with no installation and no login. Any cooperative, school or city hall can build its own heat calendar and download a report for grant applications, adaptation plans or ESG reporting today.
-- Next steps: validate rainfall with GPM IMERG, add sea surface temperature and sea level for coastal sites, and relate rainfall to the waste reaching mangroves and beaches using the project's collection records.
+- Next steps: validate rainfall trends numerically with GPM IMERG and local gauges (the globe already shows IMERG images), add sea level for coastal sites, and relate rainfall to the waste reaching mangroves and beaches using the project's collection records.
 
 **What already exists and what is new**
 Climate trend tools already exist, mostly for researchers: the KNMI Climate Explorer computes trends and significance for any location, NOAA Climate at a Glance publishes regional time series, and Google Earth Engine or Climate Engine run Mann-Kendall and Sen's slope with an account and code. Our tool brings the same statistical rigour to any community without login or code, answers all four challenge questions plus "since when" in plain language, and turns the result into a concrete decision: when it is safe to work outdoors.
 
 **Tools and languages**
-JavaScript, HTML and CSS (live tool, statistics in the browser), Leaflet and OpenStreetMap (map), Python with NumPy, SciPy and Matplotlib (offline analysis and charts), NASA POWER API, GitHub and GitHub Pages, PptxGenJS (slides).
+JavaScript, HTML and CSS (live tool, statistics in the browser), MapLibre GL JS (globe), NASA GIBS WMTS (imagery layers), Esri World Imagery (base imagery), Nominatim and OpenStreetMap (place search), Node.js (parity test), Python with NumPy, SciPy and Matplotlib (offline analysis and charts), NASA POWER API, GitHub and GitHub Pages, PptxGenJS (slides).
 
 ---
 
@@ -90,6 +92,18 @@ We used an AI assistant (Anthropic Claude) to help write the Python analysis cod
   https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M,RH2M&community=AG&longitude=-38.93&latitude=-13.62&time-standard=LST&start=20250101&end=20251231&format=JSON
 - **NASA POWER Data Access Viewer**: https://power.larc.nasa.gov/data-access-viewer/
 - **NASA POWER Documentation**: https://power.larc.nasa.gov/docs/
+- **NASA GIBS (Global Imagery Browse Services)**, WMTS in EPSG:3857, used for the globe images (visualization only; no statistic is computed from them): https://gibs.earthdata.nasa.gov/
+  - Capabilities checked for identifiers, formats, zoom levels and dates: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml
+  - Land surface temperature, day (MODIS Terra, monthly), layer `MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day`:
+    https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day/default/{date}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png
+  - Precipitation rate (GPM IMERG, daily), layer `IMERG_Precipitation_Rate`:
+    https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/IMERG_Precipitation_Rate/default/{date}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png
+  - Sea surface temperature anomaly (GHRSST L4 MUR25, daily), layer `GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies`:
+    https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies/default/{date}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png
+  - True color (VIIRS NOAA-20, daily), layer `VIIRS_NOAA20_CorrectedReflectance_TrueColor`:
+    https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_NOAA20_CorrectedReflectance_TrueColor/default/{date}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpeg
+  - Legends: https://gibs.earthdata.nasa.gov/legends/MODIS_Land_Surface_Temp_H.svg, https://gibs.earthdata.nasa.gov/legends/GPM_Precipitation_Rate_H.svg, https://gibs.earthdata.nasa.gov/legends/GHRSST_Sea_Surface_Temperature_Anomalies_H.svg
+- **GPM IMERG (Integrated Multi-satellitE Retrievals for GPM)**: https://gpm.nasa.gov/data/imerg
 
 ---
 
@@ -99,7 +113,12 @@ We used an AI assistant (Anthropic Claude) to help write the Python analysis cod
 - SciPy: https://scipy.org
 - Matplotlib: https://matplotlib.org
 - PptxGenJS: https://gitbrent.github.io/PptxGenJS/
-- Leaflet: https://leafletjs.com · OpenStreetMap: https://www.openstreetmap.org/copyright
+- MapLibre GL JS (globe and map library): https://maplibre.org
+- Esri World Imagery (base satellite imagery, © Esri, Maxar, Earthstar Geographics, and the GIS User Community): https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer
+- Esri World Boundaries and Places (labels layer): https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer
+- Nominatim place search, © OpenStreetMap contributors (ODbL): https://nominatim.org · https://www.openstreetmap.org/copyright
+- Google Fonts, Fraunces and Manrope (SIL Open Font License): https://fonts.google.com
+- Node.js (parity test): https://nodejs.org
 - KNMI Climate Explorer (related tool): https://climexp.knmi.nl
 - NOAA Climate at a Glance (related tool): https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/
 - NOAA/NWS heat index equation (Rothfusz): https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml
@@ -117,9 +136,11 @@ We used an AI assistant (Anthropic Claude) to help write the Python analysis cod
 3. Esperar 1 a 2 minutos e abrir `https://imilena.github.io/raizes-trend-detective/`.
 
 **Testar a página numa janela anônima**
-- Clicar no mapa e em "Investigate": as quatro respostas e o gráfico aparecem.
+- A página abre no globo, centrado em Boipeba, e o painel já mostra +0,26 °C por década, p < 0,001, depois de 1997.
+- Clicar em qualquer lugar do globo: o contorno da célula aparece e as quatro respostas e o gráfico mudam.
+- Abrir "NASA layers", trocar entre as três camadas, mexer na data e apertar play: a legenda e a data na tela acompanham.
 - Clicar em "Scan the area": 9 quadrados coloridos aparecem no mapa.
-- Clicar em "Build heat calendar": em uns 20 segundos aparece o calendário de calor.
+- Clicar em "Heat calendar": em uns 10 a 20 segundos aparece o calendário de calor (dá para cancelar).
 - Clicar em "Download report" e abrir o arquivo baixado.
 - Abrir o link do PDF dos slides: precisa abrir sem login.
 
