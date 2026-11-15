@@ -43,16 +43,16 @@
     <form class="search" id="search" role="search">
       <label class="sr-only" for="q">Coordinates (lat, lon) or place name</label>
       <input id="q" type="search" placeholder="lat, lon (e.g. -3.12, -60.02) or a city" autocomplete="off">
-      <button class="icon-btn" type="submit" aria-label="Find and analyse"><svg class="i"><use href="#i-search"/></svg></button>
+      <button class="icon-btn" type="submit" aria-label="Find and analyse"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg></button>
     </form>
     <div class="top-actions">
-      <button class="btn ghost" id="go-boipeba" type="button"><svg class="i"><use href="#i-target"/></svg><span>Go to Boipeba <span class="lbl-long">case study</span></span></button>
+      <button class="btn ghost" id="go-boipeba" type="button"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg><span>Go to Boipeba <span class="lbl-long">case study</span></span></button>
     </div>
   </div>
 
   <aside class="panel" id="panel" aria-labelledby="panel-title">
     <div class="panel-head" id="panel-head">
-      <button class="icon-btn" id="panel-toggle" type="button" aria-expanded="true" aria-controls="panel-body" aria-label="Hide results panel"><svg class="i" id="panel-chev"><use href="#i-chev"/></svg></button>
+      <button class="icon-btn" id="panel-toggle" type="button" aria-expanded="true" aria-controls="panel-body" aria-label="Hide results panel"><svg class="i" aria-hidden="true" id="panel-chev"><use href="#i-chev"/></svg></button>
       <div>
         <p class="eyebrow">Trend at this NASA POWER cell</p>
         <h2 id="panel-title" tabindex="-1">Boipeba Island, Bahia, Brazil</h2>
@@ -81,7 +81,7 @@
   </aside>
 
   <div class="map-caption" id="map-caption" aria-live="polite"></div>
-  <a class="btn ghost scroll-hint" href="#case"><svg class="i"><use href="#i-down"/></svg>Boipeba case study</a>
+  <a class="btn ghost scroll-hint" href="#case"><svg class="i" aria-hidden="true"><use href="#i-down"/></svg>Boipeba case study</a>
 </div>
 
 <!-- ===================================================== CASE STUDY -->

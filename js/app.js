@@ -53,6 +53,7 @@ function initMap() {
   });
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
   map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
+  map.once("idle", () => setTimeout(() => { if (mobile()) document.querySelector(".maplibregl-ctrl-attrib")?.classList.remove("maplibregl-compact-show"); }, 300));
   map.on("click", e => selectPlace(e.lngLat.lat, wrapLon(e.lngLat.lng), null, { fly: true }));
   map.on("error", e => { if (e?.error?.status) return; console.warn("map:", e?.error?.message || e); });
   const el = document.createElement("button");

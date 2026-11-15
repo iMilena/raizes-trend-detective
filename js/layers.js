@@ -36,12 +36,12 @@ for (const L of GIBS_LAYERS) S.date[L.key] = snap(L, L.period === "P1D" ? addSte
 
 /* ---------- panel markup ---------- */
 $("go-boipeba").insertAdjacentHTML("beforebegin",
-  `<button class="btn ghost" id="layers-btn" type="button" aria-expanded="false" aria-controls="layers"><svg class="i"><use href="#i-layers"/></svg><span>NASA layers</span></button>`);
+  `<button class="btn ghost" id="layers-btn" type="button" aria-expanded="false" aria-controls="layers"><svg class="i" aria-hidden="true"><use href="#i-layers"/></svg><span>NASA layers</span></button>`);
 $("app").insertAdjacentHTML("beforeend", `
 <section class="layers" id="layers" aria-labelledby="layers-title" hidden>
   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
     <h2 id="layers-title">Layers</h2>
-    <button class="icon-btn" id="layers-close" type="button" aria-label="Close layers"><svg class="i"><use href="#i-x"/></svg></button>
+    <button class="icon-btn" id="layers-close" type="button" aria-label="Close layers"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
   </div>
   <fieldset><legend>Base imagery</legend>
     <label class="radio"><input type="radio" name="base" value="esri" checked> Esri World Imagery (sharp, mosaic)</label>
@@ -57,10 +57,10 @@ $("app").insertAdjacentHTML("beforeend", `
     <input id="opacity" type="range" min="0" max="1" step="0.05" value="${S.opacity}">
     <label class="lbl" for="ldate" style="margin-top:6px">Date</label>
     <div class="date-row">
-      <button class="icon-btn" id="d-prev" type="button" aria-label="Previous date"><svg class="i"><use href="#i-left"/></svg></button>
+      <button class="icon-btn" id="d-prev" type="button" aria-label="Previous date"><svg class="i" aria-hidden="true"><use href="#i-left"/></svg></button>
       <input id="ldate" type="date">
-      <button class="icon-btn" id="d-next" type="button" aria-label="Next date"><svg class="i"><use href="#i-chev"/></svg></button>
-      <button class="icon-btn" id="d-play" type="button" aria-pressed="false" aria-label="Play through dates"><svg class="i" id="play-ico"><use href="#i-play"/></svg></button>
+      <button class="icon-btn" id="d-next" type="button" aria-label="Next date"><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <button class="icon-btn" id="d-play" type="button" aria-pressed="false" aria-label="Play through dates"><svg class="i" aria-hidden="true" id="play-ico"><use href="#i-play"/></svg></button>
     </div>
     <label class="lbl" for="lstep" style="margin-top:8px">Play and step by</label>
     <select id="lstep"></select>
@@ -112,7 +112,7 @@ function ui() {
   }
   const base = S.base === "esri" ? "Base: Esri World Imagery" : `Base: NASA GIBS ${TRUE.id}, ${nice(TRUE, S.date[TRUE.key])}`;
   $("map-caption").innerHTML = L
-    ? `<strong>${esc(L.title)}</strong>, ${esc(nice(L, S.date[L.key]))}. Source: NASA GIBS, layer <code>${L.id}</code>. ${base}.`
+    ? `<strong>${esc(L.title)}</strong>, ${esc(nice(L, S.date[L.key]))}. Source: NASA GIBS<span class="cap-extra">, layer <code>${L.id}</code>. ${base}</span>.`
     : `${base}. No NASA overlay.`;
 }
 

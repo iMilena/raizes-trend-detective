@@ -12,15 +12,15 @@ let ctl = null, lastHeat = null;
 
 /* ---------- markup ---------- */
 $("actions").insertAdjacentHTML("beforeend", `
-  <button class="btn ghost" id="heat" type="button"><svg class="i"><use href="#i-sun"/></svg>Heat calendar</button>
-  <button class="btn ghost" id="dl-report" type="button"><svg class="i"><use href="#i-file"/></svg>Download report</button>
-  <button class="btn ghost" id="dl-csv" type="button"><svg class="i"><use href="#i-table"/></svg>Download CSV</button>`);
+  <button class="btn ghost" id="heat" type="button"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg>Heat calendar</button>
+  <button class="btn ghost" id="dl-report" type="button"><svg class="i" aria-hidden="true"><use href="#i-file"/></svg>Download report</button>
+  <button class="btn ghost" id="dl-csv" type="button"><svg class="i" aria-hidden="true"><use href="#i-table"/></svg>Download CSV</button>`);
 document.body.insertAdjacentHTML("beforeend", `
 <dialog id="heat-dlg" aria-labelledby="heat-title">
   <div class="dlg-head">
     <div><p class="eyebrow">Heat calendar for outdoor work</p><h2 id="heat-title">…</h2>
       <p class="small">NASA POWER hourly temperature and humidity, heat index (NOAA/NWS), 2001 to 2005 vs 2021 to 2025. Local solar time.</p></div>
-    <button class="icon-btn" id="heat-close" type="button" aria-label="Close heat calendar"><svg class="i"><use href="#i-x"/></svg></button>
+    <button class="icon-btn" id="heat-close" type="button" aria-label="Close heat calendar"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
   </div>
   <div class="dlg-body">
     <div id="heat-progress">
