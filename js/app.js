@@ -90,6 +90,7 @@ export function setPanel(open) {
   const p = $("panel"); p.classList.toggle("collapsed", !open);
   const b = $("panel-toggle"); b.setAttribute("aria-expanded", String(open));
   b.setAttribute("aria-label", open ? "Hide results panel" : "Show results panel");
+  if (map) map.setPadding(mobile() ? { top: 120, bottom: open ? Math.round(innerHeight * 0.55) : 80, left: 0, right: 0 } : { top: 70, bottom: 30, left: 0, right: open ? 460 : 60 });
   $("panel-chev").style.transform = mobile() ? (open ? "rotate(90deg)" : "rotate(-90deg)") : (open ? "" : "rotate(180deg)");
 }
 $("panel-toggle").addEventListener("click", e => { e.stopPropagation(); setPanel($("panel").classList.contains("collapsed")); });
@@ -146,7 +147,7 @@ function show(L) {
   $("a-sig").textContent = sig ? "Yes" : "No";
   $("a-sig-s").textContent = `${ptxt}, Mann-Kendall with Hamed-Rao autocorrelation correction`;
   $("a-when").textContent = cp ? `after ${years[a.pt.k]}` : "no break";
-  $("a-when-s").textContent = cp ? `Pettitt p = ${a.pt.p < 0.001 ? "< 0.001" : a.pt.p.toFixed(3)}: ${a.pt.before.toFixed(d)} to ${a.pt.after.toFixed(d)} ${VV.unit}` : `Pettitt p = ${a.pt.p.toFixed(2)}`;
+  $("a-when-s").textContent = cp ? `Pettitt ${a.pt.p < 0.001 ? "p < 0.001" : "p = " + a.pt.p.toFixed(3)}: ${a.pt.before.toFixed(d)} to ${a.pt.after.toFixed(d)} ${VV.unit}` : `Pettitt p = ${a.pt.p.toFixed(2)}`;
   const rain = v === "PRECTOTCORR" ? `<p class="flag"><strong>Signal to confirm.</strong> Rainfall trends from reanalysis can carry artifacts from changes in the observing system. Confirm with GPM IMERG or local rain gauges before acting on it.</p>` : "";
   $("verdict").innerHTML = (sig
     ? `At <strong>${esc(L.place)}</strong>, ${VV.name} shows a statistically significant trend of <strong>${fmt(dec, d)} ${VV.unit} per decade</strong>${cp ? `, with a shift after ${years[a.pt.k]}` : ""}.`
