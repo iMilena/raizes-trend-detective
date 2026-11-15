@@ -1,0 +1,9 @@
+{
+  "name": "raizes-trend-detective",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/parity.test.mjs",
+    "test:live": "node tests/parity.test.mjs --live && node tests/places.test.mjs"
+  }
+}
