@@ -7,23 +7,21 @@
 <meta name="description" content="A global, interactive Earth system trend detective built on NASA POWER and NASA GIBS: click anywhere on the planet to learn what is changing, where, how much, and whether the change is statistically significant. Case study: heat risk for the community waste collectors of Boipeba Island, Brazil.">
 <meta name="generator" content="Page, map, tool and analysis code written with AI assistance (Anthropic Claude), reviewed by the team">
 <meta name="ai-disclosure" content="Code written with AI assistance (Anthropic Claude). Data are NASA POWER and NASA GIBS values, not AI generated.">
-<meta name="theme-color" content="#04100d">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%2304100d%27 stroke=%27%237fd99a%27 stroke-width=%273%27/%3E%3Cpath d=%27M6 18c6-6 14-6 20 0%27 fill=%27none%27 stroke=%27%23f3b267%27 stroke-width=%273%27/%3E%3C/svg%3E">
+<meta name="theme-color" content="#05080b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%2305080b%27 stroke=%27%237fd8a4%27 stroke-width=%273%27/%3E%3Cpath d=%27M6 18c6-6 14-6 20 0%27 fill=%27none%27 stroke=%27%23ff8a4c%27 stroke-width=%273%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.6.0/maplibre-gl.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<a class="skip" href="#panel-title">Skip to the results panel</a>
+<a class="skip" href="#q">Skip to place search</a>
 
 <!-- SVG line icons -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
-  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></symbol>
-  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
-  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
   <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
@@ -31,57 +29,94 @@
   <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></symbol>
-  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
 </svg>
 
 <div id="app">
-  <div id="map" role="application" aria-label="Interactive globe. Click any place to analyse its NASA POWER grid cell. Keyboard users can type coordinates in the search box."></div>
+  <div id="map" role="application" aria-label="Interactive globe. Click any place to analyse its NASA POWER grid cell. Keyboard users can type a place or coordinates in the search box."></div>
 
-  <div class="topbar">
-    <div class="brand"><b>Raízes do Futuro</b><span>Island Trend Detective · NASA Space Apps 2026</span></div>
+  <header class="topbar">
+    <div class="brand"><span class="dot" aria-hidden="true"></span><span class="brand-txt"><b>Raízes do Futuro</b><small>Island Trend Detective</small></span></div>
     <form class="search" id="search" role="search">
-      <label class="sr-only" for="q">Coordinates (lat, lon) or place name</label>
-      <input id="q" type="search" placeholder="lat, lon (e.g. -3.12, -60.02) or a city" autocomplete="off">
-      <button class="icon-btn" type="submit" aria-label="Find and analyse"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg></button>
+      <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
+      <label class="sr-only" for="q">Search a city or type coordinates as lat, lon</label>
+      <input id="q" type="search" placeholder="Search a city or paste lat, lon" autocomplete="off" enterkeyhint="search">
+      <kbd aria-hidden="true" title="Press / to search">/</kbd>
     </form>
     <div class="top-actions">
-      <button class="btn ghost" id="go-boipeba" type="button"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg><span>Go to Boipeba <span class="lbl-long">case study</span></span></button>
+      <button class="btn ghost" id="layers-btn" type="button" aria-expanded="false" aria-controls="layers" aria-label="Layers"><svg class="i" aria-hidden="true"><use href="#i-layers"/></svg><span class="txt">Layers</span></button>
+      <button class="btn" id="go-boipeba" type="button" aria-label="Boipeba case"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg><span class="txt">Boipeba case</span></button>
     </div>
-  </div>
+  </header>
 
-  <aside class="panel" id="panel" aria-labelledby="panel-title">
-    <div class="panel-head" id="panel-head">
-      <button class="icon-btn" id="panel-toggle" type="button" aria-expanded="true" aria-controls="panel-body" aria-label="Hide results panel"><svg class="i" aria-hidden="true" id="panel-chev"><use href="#i-chev"/></svg></button>
-      <div>
-        <p class="eyebrow">Trend at this NASA POWER cell</p>
-        <h2 id="panel-title" tabindex="-1">Boipeba Island, Bahia, Brazil</h2>
-        <p class="small" id="panel-cell"></p>
-      </div>
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <p class="eyebrow">NASA Space Apps 2026 · Earth System Trend Detective</p>
+    <h1 id="hero-title">Is the climate where you live <em>changing?</em></h1>
+    <p class="hero-lead">Click any place on Earth. We test 45 years of NASA POWER data and answer in plain words: what is changing, how much, since when, and whether it is real.</p>
+    <div class="row">
+      <button class="btn" id="hero-boipeba" type="button">See what we found in Boipeba</button>
+      <button class="btn ghost" id="hero-explore" type="button">Explore the globe</button>
     </div>
-    <div class="panel-body" id="panel-body">
-      <div class="form-row">
-        <div class="full"><label class="lbl" for="variable">Variable (NASA POWER)</label>
-          <select id="variable"></select></div>
-        <div><label class="lbl" for="y0">From</label><input id="y0" type="number" value="1981" min="1981" max="2015" inputmode="numeric"></div>
-        <div><label class="lbl" for="y1">To</label><input id="y1" type="number" value="2025" min="1991" max="2025" inputmode="numeric"></div>
+    <p class="hint"><i aria-hidden="true"></i>Click anywhere on the globe</p>
+  </section>
+
+  <aside class="drawer hide" id="panel" aria-labelledby="panel-title" inert>
+    <div class="d-head">
+      <div class="place">
+        <p class="eyebrow">Trend at this NASA POWER cell</p>
+        <h2 id="panel-title" tabindex="-1">Selected cell</h2>
+        <p class="coords" id="panel-cell"></p>
+      </div>
+      <button class="close" id="panel-close" type="button" aria-label="Close results"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="d-body">
+      <div class="controls">
+        <label class="sr-only" for="variable">Variable (NASA POWER)</label>
+        <select id="variable"></select>
+        <div class="period" role="group" aria-label="Period">
+          <label class="sr-only" for="y0">From year</label>
+          <input id="y0" type="number" value="1981" min="1981" max="2015" inputmode="numeric">
+          <span aria-hidden="true">to</span>
+          <label class="sr-only" for="y1">To year</label>
+          <input id="y1" type="number" value="2025" min="1991" max="2025" inputmode="numeric">
+        </div>
       </div>
       <p class="status" id="status" role="status" aria-live="polite"></p>
-      <div class="answers" aria-live="polite">
-        <div class="ans"><div class="q">What</div><div class="big warm" id="a-what">…</div><div class="s" id="a-what-s"></div></div>
-        <div class="ans"><div class="q">How much</div><div class="big warm" id="a-much">…</div><div class="s" id="a-much-s"></div></div>
-        <div class="ans"><div class="q">Significant?</div><div class="big" id="a-sig">…</div><div class="s" id="a-sig-s"></div></div>
-        <div class="ans"><div class="q">Since when</div><div class="big" id="a-when">…</div><div class="s" id="a-when-s"></div></div>
-      </div>
-      <div class="verdict" id="verdict">Click anywhere on the globe.</div>
-      <svg class="chart" id="chart" viewBox="0 0 560 320" role="img" aria-label="Annual series with Theil-Sen trend line"></svg>
-      <p class="legend">Bars: annual values (orange after a significant change point). Dashed line: Theil-Sen trend. Dotted line: change point. Outline on the map: the NASA POWER cell (0.5° latitude x 0.625° longitude) these numbers describe.</p>
-      <div class="actions" id="actions"></div>
-    </div>
-  </aside>
 
-  <div class="map-caption" id="map-caption" aria-live="polite"></div>
-  <a class="btn ghost scroll-hint" href="#case"><svg class="i" aria-hidden="true"><use href="#i-down"/></svg>Boipeba case study</a>
+      <div class="verdict-card neutral" id="verdict-card" aria-live="polite">
+        <p class="eyebrow">What is changing</p>
+        <div class="big"><span id="a-trend">…</span><small id="a-trend-u"></small></div>
+        <div class="verdict" id="verdict">Click anywhere on the globe.</div>
+      </div>
+
+      <div class="minis">
+        <div class="mini"><div class="k">How much</div><div class="v" id="a-much">…</div><div class="s" id="a-much-s"></div></div>
+        <div class="mini"><div class="k">Real?</div><div class="v" id="a-sig">…</div><div class="s" id="a-sig-s"></div></div>
+        <div class="mini"><div class="k">Since when</div><div class="v" id="a-when">…</div><div class="s" id="a-when-s"></div></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head"><b id="chart-title">Annual series</b><div class="legend-inline" id="chart-key"></div></div>
+        <svg class="chart" id="chart" viewBox="0 0 380 190" role="img" aria-label="Annual series with Theil-Sen trend line"></svg>
+        <p class="ai-note">NASA POWER · chart code written with AI assistance</p>
+      </div>
+
+      <details>
+        <summary>How we tested this</summary>
+        <p id="method-text"></p>
+        <p>Bars: annual values, orange after a significant change point. Dashed line: Theil-Sen trend. Dotted line: change point (shift).</p>
+        <p id="method-cell"></p>
+        <div class="slot" id="report-slot"></div>
+      </details>
+      <details>
+        <summary>Scan the 8 neighbouring cells</summary>
+        <p>Tests this cell and the 8 around it with false discovery rate control (q = 0.05) and colours them on the globe: orange for an increase, blue for a decrease, faded and dashed when not significant.</p>
+        <div class="slot" id="scan-slot"></div>
+      </details>
+      <p class="case-link"><a href="#case">Read the full Boipeba case study</a></p>
+    </div>
+    <div class="d-foot" id="drawer-foot"></div>
+  </aside>
 </div>
 
 <!-- ===================================================== CASE STUDY -->

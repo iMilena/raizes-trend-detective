@@ -11,10 +11,11 @@ const YEARS_A = [2001, 2002, 2003, 2004, 2005], YEARS_B = [2021, 2022, 2023, 202
 let ctl = null, lastHeat = null;
 
 /* ---------- markup ---------- */
-$("actions").insertAdjacentHTML("beforeend", `
-  <button class="btn ghost" id="heat" type="button"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg>Heat calendar</button>
-  <button class="btn ghost" id="dl-report" type="button"><svg class="i" aria-hidden="true"><use href="#i-file"/></svg>Download report</button>
-  <button class="btn ghost" id="dl-csv" type="button"><svg class="i" aria-hidden="true"><use href="#i-table"/></svg>Download CSV</button>`);
+$("drawer-foot").insertAdjacentHTML("beforeend", `
+  <button class="btn ghost" id="dl-csv" type="button"><svg class="i" aria-hidden="true"><use href="#i-table"/></svg>Download CSV</button>
+  <button class="btn ghost" id="heat" type="button"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg>Heat calendar</button>`);
+$("report-slot").insertAdjacentHTML("beforeend", `
+  <button class="btn ghost" id="dl-report" type="button"><svg class="i" aria-hidden="true"><use href="#i-file"/></svg>Download one-page report</button>`);
 document.body.insertAdjacentHTML("beforeend", `
 <dialog id="heat-dlg" aria-labelledby="heat-title">
   <div class="dlg-head">
@@ -102,7 +103,7 @@ function downloadCsv() {
 function downloadReport() {
   const r = state.last; if (!r) { status("Run an analysis first: click a place on the globe.", "err"); return; }
   const VV = VARS[r.v];
-  const rows = [["What", "a-what"], ["How much", "a-much"], ["Significant?", "a-sig"], ["Since when", "a-when"]].map(([q, id]) => [q, $(id).textContent, $(id + "-s").textContent]);
+  const rows = r.rows;   // the four answers, built by show() in app.js
   const scan = lastScan && lastScan.center.key === r.cell.key && lastScan.v === r.v && lastScan.y0 === state.y0 && lastScan.y1 === state.y1 ? lastScan : null;
   const scanBlock = scan ? `<h2>Where: the cell and its 8 neighbours</h2><table><tr><th>Cell centre</th><th>Slope per decade</th><th>Significant (FDR q = 0.05)</th></tr>${scan.cells.map(o => `<tr><td>${o.c.lat.toFixed(2)}, ${o.c.lon.toFixed(3)}</td><td>${o.err !== undefined ? "no data" : fmt(o.dec, VV.dec) + " " + VV.unit}</td><td>${o.err !== undefined ? "" : o.sig ? "yes" : "no"}</td></tr>`).join("")}</table>` : "";
   const heatBlock = lastHeat && lastHeat.key === r.cell.key ? `<h2>Heat calendar for outdoor work</h2><p>${lastHeat.verdict}</p>${lastHeat.svg.replace(/style="[^"]*"/, 'style="width:100%;height:auto;background:#061713;border-radius:10px"')}<p class="muted">Hourly data: NASA POWER hourly API (T2M, RH2M, local solar time), 2001 to 2005 and 2021 to 2025, https://power.larc.nasa.gov/api/temporal/hourly/point</p>` : "";

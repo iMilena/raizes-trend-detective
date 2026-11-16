@@ -70,8 +70,8 @@ async function scan() {
 }
 
 /* button and key */
-$("actions").insertAdjacentHTML("beforeend", `<button class="btn ghost" id="scan" type="button"><svg class="i" aria-hidden="true"><use href="#i-grid"/></svg>Scan the area</button>`);
-$("actions").insertAdjacentHTML("afterend", `<div class="scan-key" id="scan-key" hidden><span>Decrease</span><span class="ramp" aria-hidden="true"></span><span>Increase</span><span id="scan-key-text"></span></div>`);
+$("scan-slot").insertAdjacentHTML("beforeend", `<button class="btn ghost" id="scan" type="button"><svg class="i" aria-hidden="true"><use href="#i-grid"/></svg>Scan the area</button>`);
+$("scan-slot").insertAdjacentHTML("beforeend", `<div class="scan-key" id="scan-key" hidden><span>Decrease</span><span class="ramp" aria-hidden="true"></span><span>Increase</span><span id="scan-key-text"></span></div>`);
 $("scan").addEventListener("click", scan);
 hooks.onPlace.push(clearScan);
 for (const id of ["variable", "y0", "y1"]) $(id).addEventListener("change", clearScan);
